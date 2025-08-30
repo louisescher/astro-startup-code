@@ -4,8 +4,8 @@ import type { TransformPluginContext, TransformResult } from "rollup";
 import MagicString from "magic-string";
 import { z } from "astro/zod";
 
-const MODULE_ID = "virtual:rss-poller";
-const RESOLVED_MODULE_ID = "\x00virtual:rss-poller";
+const MODULE_ID = "virtual:astro-startup-code";
+const RESOLVED_MODULE_ID = "\x00virtual:astro-startup-code";
 
 type Transformer = (
 	ctx: TransformPluginContext,
@@ -13,9 +13,17 @@ type Transformer = (
 	id: string
 ) => TransformResult | null;
 
+/**
+ * Modifies the generated entrypoint so that the virtual module for the users
+ * entrypoint can get imported.
+ * @param ctx The plugin context.
+ * @param code The code of the module to be transformed.
+ * @param id The ID of the module to be transformed.
+ * @returns The modified code of the entrypoint, or nothing if another module is passed.
+ */
 const entrypointTransformer: Transformer = (ctx, code, id) => {
 	if (!id.includes("@astrojs-ssr-virtual-entry")) return;
-	
+
 	const ms = new MagicString(code);
 	ms.append(`import ${JSON.stringify(MODULE_ID)};\n`);
 
@@ -25,16 +33,19 @@ const entrypointTransformer: Transformer = (ctx, code, id) => {
 	};
 }
 
+/**
+ * A Vite plugin that both creates a virtual module for the users entrypoint and
+ * injects a transformer so the newly created virtual module can be imported
+ * by the Astro servers entrypoint.
+ * @param resolvedEntrypoint The path to the users entrypoint which should be loaded when the server starts.
+ * @returns
+ */
 const plugin = (resolvedEntrypoint: string): PluginOption => {
-	let code = ``;
+	const code = `import "${resolvedEntrypoint}"`;
 
 	return {
 		name: "astro-startup-code",
 		enforce: 'post',
-		async configResolved() {
-			// TODO:
-			code = `import "${resolvedEntrypoint}"`;
-		},
 		resolveId: (id) => {
 			if (id === MODULE_ID) return RESOLVED_MODULE_ID;
 
@@ -63,29 +74,57 @@ const plugin = (resolvedEntrypoint: string): PluginOption => {
 	}
 }
 
+/**
+ * An integration that allows you to run code alongside the Astro dev and production servers,
+ * for example to run a scheduled database cleanup every few hours using a `setInterval` callback.
+ */
 export default defineIntegration({
 	name: "astro-startup-code",
 	optionsSchema: z.object({
+		/**
+		 * The file you want to load when the server starts.
+		 */
 		entrypoint: z.string(),
+		/**
+		 * Whether to load the endpoint in development mode or not.
+			* @default true
+		 */
+		runInDev: z.boolean().default(true).optional(),
 	}),
 	setup: ({ options }) => {
+		const DEV_ROUTE = "/dev-only/astro-startup-code";
+
+		let resolvedEntrypoint: string;
+		let isDev = false;
+
 		return {
 			hooks: {
 				"astro:config:setup": async (params) => {
+					if (params.command === "dev" && options.runInDev) isDev = true;
+
+					if (!params.config.adapter || params.config.adapter.name !== "@astrojs/node") {
+						throw new Error("astro-startup-code currently only works with the @astrojs/node adapter.");
+					}
+
 					const { resolve } = createResolver(params.config.root.pathname);
 
 					const { updateConfig } = params;
 
-					const resolvedEntrypoint = resolve(options.entrypoint);
+					resolvedEntrypoint = resolve(options.entrypoint);
 
 					updateConfig({ vite: {plugins: [plugin(resolvedEntrypoint)] } });
 
 					injectDevRoute(params, {
 						entrypoint: resolvedEntrypoint,
-						pattern: "/dev-only/astro-startup-code",
-						prerender: false,
+						pattern: DEV_ROUTE,
+						prerender: true,
 					});
 				},
+				"astro:server:setup": async ({ server }) => {
+					if (isDev) {
+						await server.ssrLoadModule(resolvedEntrypoint, { fixStacktrace: true });
+					}
+				}
 			}
 		}
 	}

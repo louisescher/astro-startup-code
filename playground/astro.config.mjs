@@ -6,13 +6,12 @@ import node from "@astrojs/node";
 
 // https://astro.build/config
 export default defineConfig({
-    output: 'server',
-    integrations: [
-        startupCode({
-            entrypoint: "./src/cron/example.ts"
-        })
-    ],
-    adapter: node({
-        mode: "standalone"
-    })
+	integrations: [
+		startupCode({
+			entrypoint: "./src/cron/example.ts"
+		})
+	],
+	adapter: node({
+		mode: "standalone"
+	})
 });
