@@ -1,0 +1,63 @@
+{
+	"name": "astro-startup-code",
+	"version": "0.0.0",
+	"description": "An Astro integration that allows for creating type-safe server endpoints.",
+	"packageManager": "pnpm@10.15.0",
+	"license": "MIT",
+	"author": {
+		"name": "Louis Escher",
+		"url": "https://louisescher.dev"
+	},
+	"keywords": [
+		"astro",
+		"astro-integration",
+		"api",
+		"rest",
+		"type-safe",
+		"withastro"
+	],
+	"type": "module",
+	"scripts": {
+		"build": "buildkit build 'src/**/*.{ts,astro,css,js}'",
+		"dev": "buildkit dev 'src/**/*.{ts,astro,css,js}'"
+	},
+	"files": [
+		"dist"
+	],
+	"dependencies": {
+		"astro-integration-kit": "^0.19.0",
+    "magic-string": "^0.30.17"
+	},
+	"devDependencies": {
+		"@withstudiocms/buildkit": "^0.1.0-beta.1",
+		"typescript": "^5.9.2",
+		"@types/node": "22.14.0",
+		"@changesets/changelog-github": "0.5.1",
+		"@changesets/cli": "2.28.1",
+		"@changesets/config": "3.1.1",
+		"@changesets/write": "0.4.0",
+		"vite": "^6.3.4",
+		"rollup": "4.40.2"
+	},
+	"peerDependencies": {
+		"astro": "^5"
+	},
+	"exports": {
+		".": {
+			"types": "./dist/index.d.ts",
+			"default": "./dist/index.js"
+		},
+		"./types": {
+			"types": "./dist/types.d.ts",
+			"default": "./dist/types.js"
+		},
+		"./server": {
+			"types": "./dist/server.d.ts",
+			"default": "./dist/server.js"
+		},
+		"./client": {
+			"types": "./dist/client.d.ts",
+			"default": "./dist/client.js"
+		}
+	}
+}

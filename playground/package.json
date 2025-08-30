@@ -1,0 +1,16 @@
+{
+  "name": "playground",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro"
+  },
+  "dependencies": {
+    "@astrojs/node": "^9.4.3",
+    "astro": "^5.13.5",
+    "astro-startup-code": "workspace:*"
+  }
+}
