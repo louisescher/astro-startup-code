@@ -11,9 +11,6 @@
 	"keywords": [
 		"astro",
 		"astro-integration",
-		"api",
-		"rest",
-		"type-safe",
 		"withastro"
 	],
 	"type": "module",
