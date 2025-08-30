@@ -1,6 +1,6 @@
 # `astro-startup-code`
 
-An Astro Integration that allows you to run code alongside a deployment.
+An Astro Integration that allows you to run code alongside a NodeJS deployment.
 
 ## Prerequisites
 - Astro 5
