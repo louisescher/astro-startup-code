@@ -1,6 +1,6 @@
 {
 	"name": "astro-startup-code",
-	"version": "0.0.0",
+	"version": "0.1.0",
 	"description": "An Astro Integration that allows you to run code alongside a NodeJS deployment.",
 	"packageManager": "pnpm@10.15.0",
 	"license": "MIT",
@@ -26,7 +26,7 @@
 	],
 	"dependencies": {
 		"astro-integration-kit": "^0.19.0",
-    "magic-string": "^0.30.17"
+		"magic-string": "^0.30.17"
 	},
 	"devDependencies": {
 		"@withstudiocms/buildkit": "^0.1.0-beta.1",
