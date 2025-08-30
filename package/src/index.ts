@@ -89,7 +89,7 @@ export default defineIntegration({
 		 * Whether to load the endpoint in development mode or not.
 			* @default true
 		 */
-		runInDev: z.boolean().default(true).optional(),
+		runInDev: z.boolean().optional().default(true),
 	}),
 	setup: ({ options }) => {
 		const DEV_ROUTE = "/dev-only/astro-startup-code";
