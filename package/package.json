@@ -1,6 +1,6 @@
 {
 	"name": "astro-startup-code",
-	"version": "0.1.1",
+	"version": "0.1.2",
 	"description": "An Astro Integration that allows you to run code alongside a NodeJS deployment.",
 	"packageManager": "pnpm@10.15.0",
 	"license": "MIT",
