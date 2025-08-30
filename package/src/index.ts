@@ -7,6 +7,13 @@ import { z } from "astro/zod";
 const MODULE_ID = "virtual:astro-startup-code";
 const RESOLVED_MODULE_ID = "\x00virtual:astro-startup-code";
 
+const DEV_ROUTE = "/dev-only/astro-startup-code";
+
+const ALLOWED_ADAPTERS = [
+	"@astrojs/node",
+	"@deno/astro-adapter"
+];
+
 type Transformer = (
 	ctx: TransformPluginContext,
 	code: string,
@@ -92,8 +99,6 @@ export default defineIntegration({
 		runInDev: z.boolean().optional().default(true),
 	}),
 	setup: ({ options }) => {
-		const DEV_ROUTE = "/dev-only/astro-startup-code";
-
 		let resolvedEntrypoint: string;
 		let isDev = false;
 
@@ -102,8 +107,8 @@ export default defineIntegration({
 				"astro:config:setup": async (params) => {
 					if (params.command === "dev" && options.runInDev) isDev = true;
 
-					if (!params.config.adapter || params.config.adapter.name !== "@astrojs/node") {
-						throw new Error("astro-startup-code currently only works with the @astrojs/node adapter.");
+					if (!params.config.adapter || !ALLOWED_ADAPTERS.includes(params.config.adapter.name)) {
+						throw new Error(`astro-startup-code currently only works with one of the following adapters: ${ALLOWED_ADAPTERS.join(", ")}`);
 					}
 
 					const { resolve } = createResolver(params.config.root.pathname);

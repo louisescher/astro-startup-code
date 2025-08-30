@@ -4,7 +4,7 @@ An Astro Integration that allows you to run code alongside a NodeJS deployment.
 
 ## Prerequisites
 - Astro 5
-- The `@astrojs/node` adapter
+- Either the `@astrojs/node` or the `@deno/astro-adapter` adapter
 
 ## Getting Started
 First, install the integration:
