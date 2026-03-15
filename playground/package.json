@@ -1,17 +1,17 @@
 {
-  "name": "playground",
-  "private": true,
-  "type": "module",
-  "scripts": {
-    "dev": "astro dev",
-    "build": "astro build",
-    "preview": "astro preview",
-    "astro": "astro",
-    "start": "node ./dist/server/entry.mjs"
-  },
-  "dependencies": {
-    "@astrojs/node": "^9.4.3",
-    "astro": "^5.13.5",
-    "astro-startup-code": "workspace:*"
-  }
+	"name": "playground",
+	"private": true,
+	"type": "module",
+	"scripts": {
+		"dev": "astro dev",
+		"build": "astro build",
+		"preview": "astro preview",
+		"astro": "astro",
+		"start": "node ./dist/server/entry.mjs"
+	},
+	"dependencies": {
+		"@astrojs/node": "^10.0.0",
+		"astro": "^6.0.4",
+		"astro-startup-code": "workspace:*"
+	}
 }
