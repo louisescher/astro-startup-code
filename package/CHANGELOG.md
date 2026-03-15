@@ -1,5 +1,11 @@
 # astro-startup-code
 
+## 0.2.0
+
+### Minor Changes
+
+- [#10](https://github.com/louisescher/astro-startup-code/pull/10) [`c4ab5e5`](https://github.com/louisescher/astro-startup-code/commit/c4ab5e50903e868df31b2929cb7378a137e61f65) Thanks [@louisescher](https://github.com/louisescher)! - Adds support for Astro v6
+
 ## 0.1.2
 
 ### Patch Changes
